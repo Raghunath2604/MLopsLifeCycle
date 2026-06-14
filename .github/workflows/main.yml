@@ -27,6 +27,34 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-2
 
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Pull Data from DVC
+      run: |
+        dvc pull
+
+    - name: Continuous Training (CT) Pipeline
+      env:
+        MLFLOW_TRACKING_URI: "http://a3fef5535b8f14a05a6aa3306ab88040-1540167051.us-east-2.elb.amazonaws.com/mlflow/"
+      run: |
+        export PYTHONPATH="."
+        python prediction_model/training_pipeline.py
+
+    - name: Continuous Testing (CT) - Pytest
+      env:
+        MLFLOW_TRACKING_URI: "http://a3fef5535b8f14a05a6aa3306ab88040-1540167051.us-east-2.elb.amazonaws.com/mlflow/"
+      run: |
+        export PYTHONPATH="."
+        pytest
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
