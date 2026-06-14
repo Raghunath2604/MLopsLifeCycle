@@ -25,7 +25,9 @@ A production-grade, self-healing, cloud-native machine learning ecosystem. This 
 
 ## 🗺️ System Architecture
 
-![System Architecture](architecture_diagram.png)
+<p align="center">
+  <img src="architecture_diagram.png" alt="System Architecture" width="800">
+</p>
 
 ---
 
