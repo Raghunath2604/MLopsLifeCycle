@@ -26,5 +26,7 @@ spec:
               value: "http://mlflow-service:5000"
             - name: S3_BUCKET
               value: "raghunath2604-mlops-dvc-data"
+            - name: AWS_DEFAULT_REGION
+              value: "us-east-2"
           ports:
             - containerPort: 8005
