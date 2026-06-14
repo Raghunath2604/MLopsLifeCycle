@@ -1,0 +1,5 @@
+grafana:
+  grafana.ini:
+    server:
+      root_url: "http://a3fef5535b8f14a05a6aa3306ab88040-1540167051.us-east-2.elb.amazonaws.com/grafana/"
+      serve_from_sub_path: true

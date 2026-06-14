@@ -1,0 +1,8 @@
+venv/
+terraform/
+.git/
+.github/
+__pycache__/
+*.pyc
+mlflow.db
+mlruns/

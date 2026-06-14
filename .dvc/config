@@ -1,4 +1,4 @@
 [core]
     remote = myremote
 ['remote "myremote"']
-    url = s3://YOUR_S3_BUCKET_NAME
+    url = s3://raghunath2604-mlops-dvc-data

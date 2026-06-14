@@ -1,8 +1,13 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-slim
 
 RUN pip install --upgrade pip
 
 WORKDIR /app
+
+# Cache dependencies
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install dvc[s3]
 
 COPY . /app 
 
@@ -21,9 +26,6 @@ RUN chmod +w /app/prediction_model/datasets
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/prediction_model"
 
-
-RUN pip install --no-cache-dir -r requirements.txt
-
 RUN pip install dvc[s3]
 
 # AWS credentials
@@ -32,8 +34,6 @@ ARG AWS_SECRET_ACCESS_KEY
 ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
 ENV AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 
-
-RUN dvc pull --force
 
 RUN python /app/prediction_model/training_pipeline.py
 

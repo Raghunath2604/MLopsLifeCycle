@@ -11,8 +11,13 @@ uvicorn
 gunicorn
 hyperopt
 mlflow
-xgboost
+xgboost==1.7.6
 python-multipart
 prometheus_fastapi_instrumentator
 boto3
 setuptools<70.0.0
+redis
+jinja2
+evidently
+streamlit
+python-dotenv

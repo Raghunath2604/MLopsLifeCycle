@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise MLOps | Loan Prediction Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f111a;
+            --card-bg: rgba(26, 29, 43, 0.6);
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --accent: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, var(--bg-color));
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 17, 26, 0.8);
+            backdrop-filter: blur(12px);
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            width: 90%;
+            margin: 3rem auto;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-card h2 {
+            font-family: 'Outfit', sans-serif;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            background: rgba(15, 17, 26, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.8rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(15, 17, 26, 0.8);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        button {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Results Panel */
+        .results-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .status-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(15, 17, 26, 0.8);
+            border: 4px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .status-circle.approved {
+            border-color: var(--accent);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.3);
+            color: var(--accent);
+        }
+
+        .status-circle.rejected {
+            border-color: #ef4444;
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .metrics {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .metric-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 0.2rem;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            margin-top: 1rem;
+        }
+
+        .loader {
+            display: none;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MLOps Intelligence</h1>
+        <p class="subtitle">Kubernetes-Scaled XGBoost Architecture</p>
+    </header>
+
+    <main>
+        <!-- Input Form -->
+        <div class="glass-card">
+            <h2>Loan Application</h2>
+            <form id="prediction-form" class="form-grid">
+                
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="Gender" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Married</label>
+                    <select id="Married" required>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Dependents</label>
+                    <select id="Dependents" required>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3+">3+</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Education</label>
+                    <select id="Education" required>
+                        <option value="Graduate">Graduate</option>
+                        <option value="Not Graduate">Not Graduate</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Self Employed</label>
+                    <select id="Self_Employed" required>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Property Area</label>
+                    <select id="Property_Area" required>
+                        <option value="Urban">Urban</option>
+                        <option value="Semiurban">Semiurban</option>
+                        <option value="Rural">Rural</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Applicant Income ($)</label>
+                    <input type="number" id="ApplicantIncome" value="5000" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Co-Applicant Income ($)</label>
+                    <input type="number" id="CoapplicantIncome" value="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Loan Amount (k$)</label>
+                    <input type="number" id="LoanAmount" value="150" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Loan Term (Days)</label>
+                    <input type="number" id="Loan_Amount_Term" value="360" required>
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Credit History</label>
+                    <select id="Credit_History" required>
+                        <option value="1.0">Good (1.0)</option>
+                        <option value="0.0">Bad (0.0)</option>
+                    </select>
+                </div>
+
+                <button type="submit">Run Prediction</button>
+            </form>
+        </div>
+
+        <!-- Dashboard / Results -->
+        <div class="glass-card results-panel">
+            <h2>Inference Result</h2>
+            
+            <div id="loader" class="loader"></div>
+            
+            <div id="status-display" class="status-circle">
+                STANDBY
+            </div>
+
+            <div id="source-badge" class="badge" style="display: none;">
+                Source: Redis Cache
+            </div>
+
+            <div class="metrics">
+                <div class="metric-box">
+                    <div id="latency-val" class="metric-value">-- ms</div>
+                    <div class="metric-label">Execution Latency</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">10 r/s</div>
+                    <div class="metric-label">NGINX Rate Limit</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // UI States
+            const statusCircle = document.getElementById('status-display');
+            const loader = document.getElementById('loader');
+            const latencyVal = document.getElementById('latency-val');
+            const sourceBadge = document.getElementById('source-badge');
+            
+            statusCircle.style.display = 'none';
+            loader.style.display = 'block';
+            sourceBadge.style.display = 'none';
+            statusCircle.className = 'status-circle'; // reset
+            latencyVal.textContent = 'Computing...';
+
+            // Gather Data
+            const payload = {
+                Gender: document.getElementById('Gender').value,
+                Married: document.getElementById('Married').value,
+                Dependents: document.getElementById('Dependents').value,
+                Education: document.getElementById('Education').value,
+                Self_Employed: document.getElementById('Self_Employed').value,
+                ApplicantIncome: parseFloat(document.getElementById('ApplicantIncome').value),
+                CoapplicantIncome: parseFloat(document.getElementById('CoapplicantIncome').value),
+                LoanAmount: parseFloat(document.getElementById('LoanAmount').value),
+                Loan_Amount_Term: parseFloat(document.getElementById('Loan_Amount_Term').value),
+                Credit_History: parseFloat(document.getElementById('Credit_History').value),
+                Property_Area: document.getElementById('Property_Area').value
+            };
+
+            try {
+                const startTime = performance.now();
+                
+                const response = await fetch('/prediction_api_detailed', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                const endTime = performance.now();
+                const latency = (endTime - startTime).toFixed(1);
+
+                // Update UI
+                loader.style.display = 'none';
+                statusCircle.style.display = 'flex';
+                statusCircle.textContent = data.status;
+                
+                if (data.status === 'Approved') {
+                    statusCircle.classList.add('approved');
+                } else {
+                    statusCircle.classList.add('rejected');
+                }
+
+                latencyVal.textContent = latency + ' ms';
+
+                // Show source badge (XGBoost vs Redis)
+                sourceBadge.style.display = 'inline-block';
+                if(data.source === 'redis_cache') {
+                    sourceBadge.innerHTML = '⚡ Served from <b>Redis Cache</b>';
+                    sourceBadge.style.color = '#10b981';
+                    sourceBadge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                    sourceBadge.style.background = 'rgba(16, 185, 129, 0.1)';
+                } else {
+                    sourceBadge.innerHTML = '🧠 Executed by <b>XGBoost Model</b>';
+                    sourceBadge.style.color = '#a855f7';
+                    sourceBadge.style.borderColor = 'rgba(168, 85, 247, 0.4)';
+                    sourceBadge.style.background = 'rgba(168, 85, 247, 0.1)';
+                }
+
+            } catch (error) {
+                console.error(error);
+                loader.style.display = 'none';
+                statusCircle.style.display = 'flex';
+                statusCircle.textContent = 'ERROR';
+                statusCircle.classList.add('rejected');
+                latencyVal.textContent = 'Failed';
+            }
+        });
+    </script>
+</body>
+</html>

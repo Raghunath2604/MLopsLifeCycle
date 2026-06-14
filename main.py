@@ -71,19 +71,37 @@ class LoanPrediction(BaseModel):
 
 
 
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
+
+templates = Jinja2Templates(directory="templates")
+
 @app.get("/")
-def index():
-    return {"message":"Welcome to the MLOps Loan Prediction app" }
+def index(request: Request):
+    return templates.TemplateResponse(request=request, name="index.html")
 
 @app.post("/prediction_api")
 def predict(loan_details: LoanPrediction):
     data = loan_details.model_dump()
-    prediction = generate_predictions([data])["prediction"][0]
+    prediction_result = generate_predictions([data])
+    prediction = prediction_result["prediction"][0]
     if prediction == "Y":
         pred = "Approved"
     else:
         pred = "Rejected"
     return {"status":pred}
+
+@app.post("/prediction_api_detailed")
+def predict_detailed(loan_details: LoanPrediction):
+    data = loan_details.model_dump()
+    prediction_result = generate_predictions([data])
+    prediction = prediction_result["prediction"][0]
+    source = prediction_result.get("source", "xgboost_model")
+    if prediction == "Y":
+        pred = "Approved"
+    else:
+        pred = "Rejected"
+    return {"status": pred, "source": source}
 
 
 
