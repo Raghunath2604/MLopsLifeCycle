@@ -21,60 +21,7 @@ A complete, self-healing, cloud-native ecosystem that covers the entire software
 
 ## 🗺️ System Architecture
 
-```mermaid
-graph TD
-    %% Styling
-    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:white;
-    classDef k8s fill:#326CE5,stroke:#fff,stroke-width:2px,color:white;
-    classDef docker fill:#2496ED,stroke:#fff,stroke-width:2px,color:white;
-    classDef python fill:#3776AB,stroke:#fff,stroke-width:2px,color:white;
-    classDef db fill:#003B57,stroke:#fff,stroke-width:2px,color:white;
-
-    %% Data & Training Layer
-    subgraph "1. Machine Learning Pipeline"
-        A[Raw CSV Data] --> B[Data Preprocessing]
-        B --> C[XGBoost Model Training]
-        C --> D[(MLflow Artifacts to S3)]
-    end
-
-    %% CI/CD & Containerization
-    subgraph "2. Containerization (Docker)"
-        D -- MLflow Model Registry --> E[FastAPI Application]
-        E --> F[Docker Image Build]
-        F -- push --> G[AWS Elastic Container Registry]
-    end
-
-    %% Deployment Layer
-    subgraph "3. Production Environment (EKS)"
-        G -- pull --> H(MLOps API Pods)
-        
-        subgraph "Ingress & Traffic Control"
-            I[AWS Load Balancer] --> J[NGINX Ingress Controller]
-            J -- 10 req/sec limit --> H
-        end
-        
-        subgraph "Performance Layer"
-            H -- "Cache Hit (<1ms)" --> K[(Redis Cache Cluster)]
-            H -- "Cache Miss (~3s)" --> L[XGBoost Inference Engine]
-        end
-        
-        subgraph "Monitoring & Observability"
-            M[Prometheus] -.-> H
-            M -.-> J
-            N[Grafana Dashboards] --- M
-        end
-    end
-
-    %% Connect the stages
-    C -.->|Triggers| F
-
-    %% Apply Classes
-    class I aws;
-    class H,J,M,N k8s;
-    class F,G docker;
-    class B,C,E,L python;
-    class D,K db;
-```
+![System Architecture](architecture_diagram.png)
 
 ---
 
