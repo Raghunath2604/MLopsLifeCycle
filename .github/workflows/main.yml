@@ -50,7 +50,7 @@ jobs:
       run: aws eks update-kubeconfig --name mlops
 
     - name: Deploy to EKS
-      run: |
+      run:|
         kubectl apply -f deployment.yml
         kubectl apply -f service.yml
 
