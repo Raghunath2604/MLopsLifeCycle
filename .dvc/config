@@ -1,4 +1,4 @@
 [core]
     remote = myremote
 ['remote "myremote"']
-    url = s3://loanprediction
+    url = s3://YOUR_S3_BUCKET_NAME

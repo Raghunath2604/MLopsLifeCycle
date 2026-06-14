@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: mlops
-          image: 637423514597.dkr.ecr.us-east-2.amazonaws.com/mlops:latest
+          image: YOUR_ACCOUNT_ID.dkr.ecr.YOUR_REGION.amazonaws.com/mlops:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8005

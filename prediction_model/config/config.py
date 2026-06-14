@@ -47,12 +47,12 @@ DROP_FEATURES = ['CoapplicantIncome']
 
 LOG_FEATURES = ['ApplicantIncome', 'LoanAmount'] # taking log of numerical columns
 
-S3_BUCKET = "loanprediction"
+S3_BUCKET = os.environ.get("S3_BUCKET", "YOUR_S3_BUCKET_NAME")
 
 FOLDER="datadrift"
 
-TRACKING_URI="http://ec2-3-17-191-241.us-east-2.compute.amazonaws.com:5000/"
-
+# Use local sqlite db or remote EC2 instance via environment variable
+TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI", "sqlite:///mlflow.db")
 
 EXPERIMENT_NAME="loan_prediction_model"
 
