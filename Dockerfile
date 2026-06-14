@@ -36,11 +36,8 @@ ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
 ENV AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 ENV AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
 
-RUN python /app/prediction_model/training_pipeline.py
-
-RUN pytest -v /app/tests/test_prediction.py
-
-RUN pytest --junitxml=/app/tests/test-results.xml /app/tests/test_prediction.py
+# The model is trained and tested in the GitHub Actions pipeline prior to the Docker build.
+# The FastAPI app will fetch the latest model from MLflow at runtime.
 
 EXPOSE 8005
 
