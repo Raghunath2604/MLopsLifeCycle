@@ -6,7 +6,7 @@ import mlflow
 
 # output from predict script not null
 # output from predict script is str data type
-# the output is Y for an example data
+# the output is Y for an example data.
 
 mlflow.set_tracking_uri(config.TRACKING_URI)
 
