@@ -18,5 +18,13 @@ spec:
         - name: mlops-container
           image: 429288623250.dkr.ecr.us-east-2.amazonaws.com/mlops:latest
           imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: aws-secrets
+          env:
+            - name: MLFLOW_TRACKING_URI
+              value: "http://mlflow-service:5000"
+            - name: S3_BUCKET
+              value: "raghunath2604-mlops-dvc-data"
           ports:
             - containerPort: 8005

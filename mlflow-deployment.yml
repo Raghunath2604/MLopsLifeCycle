@@ -17,6 +17,8 @@ metadata:
     app: mlflow
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: mlflow
@@ -27,7 +29,7 @@ spec:
     spec:
       containers:
       - name: mlflow
-        image: ghcr.io/mlflow/mlflow:v2.2.2
+        image: ghcr.io/mlflow/mlflow:v2.13.0
         command:
           - mlflow
           - server

@@ -98,14 +98,21 @@ def objective(params):
             'precision': precision
         })
 
-        mlflow.sklearn.log_model(classification_pipeline, "Loanprediction-model")
+        # Manually save and upload to avoid the MLflow 2.13.0 model registry bug on SQLite
+        import tempfile
+        import os
+        import shutil
+        with tempfile.TemporaryDirectory() as tmpdir:
+            model_path = os.path.join(tmpdir, "model_dir")
+            mlflow.sklearn.save_model(classification_pipeline, model_path)
+            mlflow.log_artifacts(model_path, "Loanprediction-model")
     return {'loss': 1-f1, 'status': STATUS_OK}
     
 
 
 trials = Trials()
 
-best_params = fmin(fn=objective, space=search_space, algo=tpe.suggest, max_evals=5, trials=trials)
+best_params = fmin(fn=objective, space=search_space, algo=tpe.suggest, max_evals=1, trials=trials)
 
 print("Best hyperparameters:", best_params)
 

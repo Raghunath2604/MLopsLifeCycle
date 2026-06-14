@@ -1,7 +1,8 @@
 import pathlib
 import os
+from dotenv import load_dotenv
 
-
+load_dotenv()
 current_directory = os.path.dirname(os.path.realpath(__file__)) #current directory of the script
 
 PACKAGE_ROOT = os.path.dirname(current_directory) #parent directory of current directory
