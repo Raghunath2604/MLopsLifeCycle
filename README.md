@@ -25,9 +25,7 @@ A production-grade, self-healing, cloud-native machine learning ecosystem. This 
 
 ## 🗺️ System Architecture
 
-<p align="center">
-  <img src="architecture_diagram.png" alt="System Architecture" width="800"/>
-</p>
+![System Architecture](architecture_diagram.png)
 
 ---
 
@@ -131,21 +129,12 @@ kubectl apply -f service-monitor.yml
 
 ## 📊 Dashboard Showcases
 
-<table align="center">
-  <tr>
-    <td align="center"><b>Data Drift Monitoring (Evidently AI)</b></td>
-    <td align="center"><b>Data Quality Checks (Evidently AI)</b></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/Chandru-21/MLOps_Project/assets/64595758/af0df23d-9980-4ee4-94c0-ddebdb923237" width="450"/></td>
-    <td><img src="https://github.com/Chandru-21/MLOps_Project/assets/64595758/c1c62d64-9b69-4ca7-ba45-45ae226a7620" width="450"/></td>
-  </tr>
-  <tr>
-    <td align="center"><b>Live API Traffic (Grafana)</b></td>
-    <td align="center"><b>EKS Cluster Health (Grafana)</b></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/Chandru-21/MLOps_Project/assets/64595758/930f0a9a-352f-41f9-8106-9b6735af8ce4" width="450"/></td>
-    <td><img src="https://github.com/Chandru-21/MLOps_Project/assets/64595758/d046d9f9-1477-4975-9041-f4aa128bb0f3" width="450"/></td>
-  </tr>
-</table>
+### Data Drift & Quality Checks (Evidently AI)
+| Data Drift Monitoring | Data Quality Checks |
+| :---: | :---: |
+| <img src="https://github.com/Chandru-21/MLOps_Project/assets/64595758/af0df23d-9980-4ee4-94c0-ddebdb923237" alt="Data Drift" width="400"> | <img src="https://github.com/Chandru-21/MLOps_Project/assets/64595758/c1c62d64-9b69-4ca7-ba45-45ae226a7620" alt="Data Quality" width="400"> |
+
+### API Traffic & Cluster Health (Prometheus + Grafana)
+| Live API Traffic | Kubernetes Cluster Health |
+| :---: | :---: |
+| <img src="https://github.com/Chandru-21/MLOps_Project/assets/64595758/930f0a9a-352f-41f9-8106-9b6735af8ce4" alt="Grafana API Traffic" width="400"> | <img src="https://github.com/Chandru-21/MLOps_Project/assets/64595758/d046d9f9-1477-4975-9041-f4aa128bb0f3" alt="Grafana Cluster Health" width="400"> |
